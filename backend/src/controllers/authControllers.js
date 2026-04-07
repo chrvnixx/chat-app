@@ -3,7 +3,7 @@ import User from "../models/User.js";
 import generateToken from "../utils/generateToken.js";
 
 export async function signup(req, res) {
-  const { email, password, fullname } = req.body;
+  const { email, password, fullName } = req.body;
   try {
     const userAlreadyExists = await User.findOne({ email });
     if (userAlreadyExists) {
@@ -11,7 +11,7 @@ export async function signup(req, res) {
     }
 
     const user = new User({
-      fullname,
+      fullName,
       email,
       password,
     });
