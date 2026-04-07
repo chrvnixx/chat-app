@@ -9,10 +9,13 @@ import SignupPage from "./pages/SignupPage";
 import { useAuthStore } from "./store/authStore";
 import { useEffect } from "react";
 import { BarLoader } from "react-spinners";
+import { useThemeStore } from "./store/themeStore";
+import { useState } from "react";
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
 
+  const { theme } = useThemeStore();
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
@@ -26,8 +29,8 @@ const App = () => {
   }
 
   return (
-    <div>
-      <Navbar />
+    <div data-theme={theme}>
+      <Navbar  />
 
       <Routes>
         <Route
