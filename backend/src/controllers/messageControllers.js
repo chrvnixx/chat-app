@@ -55,7 +55,17 @@ export async function sendMessage(req, res) {
 
     await newMessage.save();
 
-    res.status(201).json({ newMessage });
+    // Emit the new message to all connected clients
+    const io = req.io;
+    const onlineUsers = req.onlineUsers;
+    if (io && onlineUsers) {
+      const receiverSocketId = onlineUsers.get(receiverId.toString());
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit("newMessage", newMessage);
+      }
+    }
+
+    res.status(201).json(newMessage);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
     console.log("Error in send messageg  controller");

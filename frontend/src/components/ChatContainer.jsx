@@ -1,10 +1,10 @@
-import { useChatStore } from "../store/chhatStore";
+import { useChatStore } from "../store/chatStore";
 import { useEffect, useRef } from "react";
 
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
 import MessageSkeleton from "./skeletons/MessageSkeleton";
-import { useAuthStore } from "../store/useAuthStore";
+import { useAuthStore } from "../store/authStore";
 import { formatMessageTime } from "../lib/utils";
 
 const ChatContainer = () => {
@@ -20,12 +20,18 @@ const ChatContainer = () => {
   const messageEndRef = useRef(null);
 
   useEffect(() => {
-    getMessages(selectedUser._id);
-
-    subscribeToMessages();
+    if (selectedUser) {
+      getMessages(selectedUser._id);
+      subscribeToMessages();
+    }
 
     return () => unsubscribeFromMessages();
-  }, [selectedUser._id, getMessages, subscribeToMessages, unsubscribeFromMessages]);
+  }, [
+    selectedUser?._id,
+    getMessages,
+    subscribeToMessages,
+    unsubscribeFromMessages,
+  ]);
 
   useEffect(() => {
     if (messageEndRef.current && messages) {
@@ -33,7 +39,7 @@ const ChatContainer = () => {
     }
   }, [messages]);
 
-  if (isMessagesLoading) {
+  if (isMessagesLoading && messages.length === 0) {
     return (
       <div className="flex-1 flex flex-col overflow-auto">
         <ChatHeader />
@@ -48,9 +54,9 @@ const ChatContainer = () => {
       <ChatHeader />
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <div
-            key={message._id}
+            key={message._id || index}
             className={`chat ${message.senderId === authUser._id ? "chat-end" : "chat-start"}`}
             ref={messageEndRef}
           >
@@ -76,7 +82,7 @@ const ChatContainer = () => {
                 <img
                   src={message.image}
                   alt="Attachment"
-                  className="sm:max-w-[200px] rounded-md mb-2"
+                  className="sm:max-w-50 rounded-md mb-2"
                 />
               )}
               {message.text && <p>{message.text}</p>}
