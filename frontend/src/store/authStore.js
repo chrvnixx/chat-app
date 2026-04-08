@@ -4,7 +4,7 @@ import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
-const api_url = "http://localhost:4000/api";
+const api_url = import.meta.env.VITE_API_URL || "http://localhost:4000/api";
 
 axios.defaults.withCredentials = true;
 
