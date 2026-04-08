@@ -16,6 +16,9 @@ services:
     rootDir: frontend
     buildCommand: npm run build
     staticPublishPath: dist
+    routes:
+      - path: /*
+        destination: /index.html
     envVars:
       - key: VITE_API_URL
         scope: build
