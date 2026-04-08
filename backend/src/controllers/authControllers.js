@@ -18,10 +18,7 @@ export async function signup(req, res) {
     await user.save();
 
     generateToken(user._id, res);
-    res.status(201).json({
-      message: "User created",
-      user: { ...user._doc, password: undefined },
-    });
+    res.status(201).json({ ...user._doc, password: undefined });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error: error.message });
     console.log("Error in signup controller", error);
@@ -38,10 +35,7 @@ export async function login(req, res) {
 
     if (user && checkPass) {
       generateToken(user._id, res);
-      return res.status(200).json({
-        message: "logged in",
-        user: { ...user._doc, password: undefined },
-      });
+      return res.status(200).json({ ...user._doc, password: undefined });
     } else {
       return res.status(400).json({ message: "Invalid credentials" });
     }
