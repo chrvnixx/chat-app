@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: chat-app-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node src/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+    
+  - type: static
+    name: chat-app-frontend
+    rootDir: frontend
+    buildCommand: npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        scope: build
+      - key: VITE_SOCKET_URL
+        scope: build
